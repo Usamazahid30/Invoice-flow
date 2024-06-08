@@ -277,9 +277,14 @@ const DetailInvoice = () => {
     CustomerNo,
     paid,
     GstNo,
+    Unit,
   } = location.state;
 
-  const currentDate = new Date().toLocaleDateString();
+  // const currentDate = new Date().toLocaleDateString();
+  const currentDate = new Date();
+
+  const options = { month: "long", day: "numeric", year: "numeric" };
+  const formattedDate = currentDate.toLocaleDateString("en-US", options);
   const totalAmountNumber = parseFloat(totalAmount);
   const salesTaxRate = 0.18;
   const salesTaxAmount = parseFloat(
@@ -322,23 +327,24 @@ const DetailInvoice = () => {
 
     addBackgroundImage();
 
-    doc.text("DELIVERY CHALLAN", 105, 20, { align: "center" });
+    doc.text("DELIVERY CHALLAN", 105, 45, { align: "center" });
 
     doc.setFontSize(12);
-    doc.text(`Invoice NO. ${InvoiceNo}`, 20, 30);
-    doc.text(`Date: ${currentDate}`, 20, 35);
-    doc.text(`To: ${To}`, 20, 40);
-    doc.text(`Address: ${Address}`, 20, 45);
+    doc.text(`Challan NO. ${InvoiceNo}`, 20, 60);
+    doc.text(`${formattedDate}`, 20, 65);
+    doc.text(`${To}`, 20, 70);
+    doc.text(`${Address}`, 20, 75);
+    doc.text(`Unit: ${Unit}`, 20, 80);
 
-    doc.text("Dear sir,", 20, 55);
+    doc.text("Dear sir,", 20, 90);
     doc.text(
       `Thank you very much for your valued P.O#${PosNo}. We are pleased to deliver the following items.`,
       20,
-      60
+      95
     );
 
     doc.autoTable({
-      startY: 70,
+      startY: 100,
       head: [["SR. #", "DESCRIPTION", "QTY"]],
       body: Products.map((product, index) => [
         index + 1,
@@ -350,28 +356,28 @@ const DetailInvoice = () => {
     doc.text(
       "Kindly acknowledge the receipt.",
       20,
-      doc.autoTable.previous.finalY + 10
+      doc.autoTable.previous.finalY + 30
     );
-    doc.text("Thanks with Regards,", 20, doc.autoTable.previous.finalY + 15);
+    doc.text("Thanks with Regards,", 20, doc.autoTable.previous.finalY + 35);
     doc.text(
       "FOR: Al-MEHRIA ENGINEERING WORKS",
       20,
-      doc.autoTable.previous.finalY + 20
+      doc.autoTable.previous.finalY + 60
     );
 
     doc.addPage();
     addBackgroundImage();
 
-    doc.text("Commercial Invoice", 105, 20, { align: "center" });
+    doc.text("Commercial Invoice", 105, 40, { align: "center" });
 
-    doc.text(`INVOICE NO. ${InvoiceNo}`, 20, 30);
-    doc.text(`Date: ${currentDate}`, 20, 40);
-    doc.text(`To: ${To}`, 20, 50);
-    doc.text(`Address: ${Address}`, 20, 55);
-    doc.text(`P.O# ${PosNo}`, 20, 70);
+    doc.text(`INVOICE NO. ${InvoiceNo}`, 20, 55);
+    doc.text(`${formattedDate}`, 20, 60);
+    doc.text(`${To}`, 20, 70);
+    doc.text(`${Address}`, 20, 80);
+    doc.text(`P.O# ${PosNo}`, 20, 90);
 
     doc.autoTable({
-      startY: 80,
+      startY: 100,
       head: [["SR.", "DESCRIPTION", "U.PRICE", "QTY.", "T.AMOUNT"]],
       body: Products.map((product, index) => [
         index + 1,
@@ -401,20 +407,20 @@ const DetailInvoice = () => {
     doc.addPage();
     addBackgroundImage();
 
-    doc.text("SALES TAX INVOICE", 105, 20, { align: "center" });
+    doc.text("SALES TAX INVOICE", 105, 40, { align: "center" });
 
-    doc.text(`INVOICE NO. ${InvoiceNo}`, 20, 30);
-    doc.text(`Al- Mehria Engineering NTN# 2876495-1`, 20, 35);
-    doc.text(`Date: ${currentDate}`, 20, 40);
-    doc.text(`GST# 3277876212202`, 20, 45);
-    doc.text(`To: ${To}`, 20, 50);
-    doc.text(`Address: ${Address}`, 20, 55);
-    doc.text(`NTN# ${CustomerNo}`, 20, 60);
-    doc.text(`GST# ${GstNo}`, 20, 65);
-    doc.text(`P.O# ${PosNo}`, 20, 70);
+    doc.text(`INVOICE NO. ${InvoiceNo}`, 20, 50);
+    doc.text(`${formattedDate}`, 20, 55);
+    doc.text(`Al- Mehria Engineering NTN# 2876495-1`, 20, 60);
+    doc.text(`GST# 3277876212202`, 20, 65);
+    doc.text(`${To}`, 20, 75);
+    doc.text(`${Address}`, 20, 80);
+    doc.text(`NTN# ${CustomerNo}`, 20, 85);
+    doc.text(`GST# ${GstNo}`, 20, 90);
+    doc.text(`P.O# ${PosNo}`, 20, 95);
 
     doc.autoTable({
-      startY: 80,
+      startY: 105,
       head: [["SR.", "DESCRIPTION", "U.PRICE", "QTY.", "T.AMOUNT"]],
       body: Products.map((product, index) => [
         index + 1,
@@ -513,9 +519,9 @@ const DetailInvoice = () => {
       </div>
 
       <div className="mb-4">
-         <h3 className="text-lg font-semibold">Status:</h3>
-         <p>{paid ? "Paid" : "Pending"}</p>
-       </div>
+        <h3 className="text-lg font-semibold">Status:</h3>
+        <p>{paid ? "Paid" : "Pending"}</p>
+      </div>
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         onClick={generateInvoicePDF}

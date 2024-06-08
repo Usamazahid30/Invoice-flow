@@ -17,6 +17,7 @@ const NewInvoice = () => {
   const [invoiceNo, setInvoiceNo] = useState("");
   const [posNo, setPosNo] = useState("");
   const [gstNo, setGstNo] = useState("");
+  const [unit, setUnit] = useState("");
 
   const navigate = useNavigate();
 
@@ -72,6 +73,7 @@ const NewInvoice = () => {
       To: to,
       Phone: phone,
       Address: address,
+      Unit: unit,
       Products: products,
       totalAmount: getTotalAmount().toFixed(2),
     };
@@ -85,7 +87,6 @@ const NewInvoice = () => {
       });
   };
   return (
-    
     <div className="flex justify-center items-end min-h-screen bg-gray-100 p-4">
       <div className="max-w-2xl w-full bg-white p-8 rounded-lg shadow-lg">
         <h1 className="text-center font-bold text-2xl bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400 mb-8 mt-2">
@@ -142,8 +143,15 @@ const NewInvoice = () => {
             value={address}
           />
           <input
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => setUnit(e.target.value)}
             className="w-full border border-gray-300 rounded-md py-2 px-4 placeholder-gray-400 focus:outline-none focus:border-blue-500"
+            type="text"
+            placeholder="Unit"
+            value={unit}
+          />
+          <input
+            onChange={(e) => setName(e.target.value)}
+            className="w-full border border-gray-300 rounded-md py-2 px-4 placeholder-gray-400 focus:outline-none focus:border-blue-500 col-span-2"
             type="text"
             placeholder="Product Name"
             value={name}
@@ -158,10 +166,9 @@ const NewInvoice = () => {
           <input
             onChange={(e) => setQty(e.target.value)}
             className="w-full border border-gray-300 rounded-md py-2 px-4 placeholder-gray-400 focus:outline-none focus:border-blue-500"
-            type="number"
+            type="text"
             placeholder="Quantity"
             value={qty}
-            min={1}
           />
         </div>
         <div>
