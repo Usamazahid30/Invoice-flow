@@ -257,7 +257,11 @@ const Home = () => {
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex justify-center items-center h-screen ">
+        <i class="fa-solid fa-spinner"></i>
+      </div>
+    );
   }
 
   if (error) {
@@ -316,7 +320,9 @@ const Home = () => {
       </div> */}
 
       <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-4">Total Amount</h2>
+        <h2 className="text-2xl font-bold mb-4">
+          Revenue Breakdown by Company
+        </h2>
 
         <Bar data={companyAmountData} />
       </div>
