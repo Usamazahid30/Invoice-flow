@@ -512,6 +512,10 @@ const DetailInvoice = () => {
         <p>{GstNo}</p>
       </div>
 
+      <div className="mb-4">
+         <h3 className="text-lg font-semibold">Status:</h3>
+         <p>{paid ? "Paid" : "Pending"}</p>
+       </div>
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         onClick={generateInvoicePDF}
