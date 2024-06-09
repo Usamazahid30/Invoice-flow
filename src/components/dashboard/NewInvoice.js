@@ -89,7 +89,7 @@ const NewInvoice = () => {
   return (
     <div className="flex justify-center items-end min-h-screen bg-gray-100 p-4">
       <div className="max-w-2xl w-full bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-center font-bold text-2xl bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400 mb-8 mt-2">
+        <h1 className=" text-center font-bold text-2xl bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-800 mb-8 mt-2">
           NEW INVOICE
         </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
