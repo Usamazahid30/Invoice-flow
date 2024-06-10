@@ -2,6 +2,7 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import { useState } from "react";
 
 const DetailInvoice = () => {
   const location = useLocation();
@@ -19,6 +20,14 @@ const DetailInvoice = () => {
     GstNo,
     Unit,
   } = location.state;
+
+  const [gstRate, setGstRate] = useState(18); // Default GST rate set to 18%
+
+  // Update the GST rate based on user selection
+  const handleGstChange = (event) => {
+    const selectedGstRate = parseInt(event.target.value);
+    setGstRate(selectedGstRate);
+  };
 
   // const currentDate = new Date().toLocaleDateString();
   const currentDate = new Date();
@@ -58,6 +67,12 @@ const DetailInvoice = () => {
     const imgHeight = 138; // Adjust the height of the image
     const x = (width - imgWidth) / 2; // Center horizontally
     const y = height - imgHeight - -20; // Position near the bottom with some margin
+
+    const gstRateDecimal = gstRate / 100;
+    const gstAmount = totalAmountNumber * gstRateDecimal;
+
+    // Calculate net amount
+    const netAmount = totalAmountNumber + gstAmount;
 
     const addBackgroundImage = () => {
       if (img) {
@@ -152,8 +167,11 @@ const DetailInvoice = () => {
       startY: doc.autoTable.previous.finalY + 5,
       body: [
         ["TOTAL AMOUNT", `${totalAmountNumber.toFixed(2)}/-`],
-        ["SALES TAX AMOUNT", `Rs ${salesTaxAmount.toFixed(2)}/-`],
-        ["NET AMOUNT", `Rs. ${netAmount.toFixed(2)}/-`],
+        // ["SALES TAX AMOUNT", `Rs ${salesTaxAmount.toFixed(2)}/-`],
+        // ["NET AMOUNT", `Rs. ${netAmount.toFixed(2)}/-`],
+
+        [`SALES TAX AMOUNT`, `Rs ${gstAmount.toFixed(2)}/-`], // Display GST amount
+        ["NET AMOUNT", `Rs. ${netAmount.toFixed(2)}/-`], // Display net amount
       ],
       columns: [{ dataKey: "description" }, { dataKey: "amount" }],
       columnStyles: {
@@ -241,7 +259,7 @@ const DetailInvoice = () => {
       startY: doc.autoTable.previous.finalY + 5,
       body: [
         ["TOTAL AMOUNT", `${totalAmountNumber.toFixed(2)}/-`],
-        ["SALES TAX AMOUNT", `Rs ${salesTaxAmount.toFixed(2)}/-`],
+        ["SALES TAX AMOUNT", `Rs ${gstAmount.toFixed(2)}/-`],
         ["NET AMOUNT", `Rs. ${netAmount.toFixed(2)}/-`],
       ],
       columns: [{ dataKey: "description" }, { dataKey: "amount" }],
@@ -334,6 +352,18 @@ const DetailInvoice = () => {
       <div className="mb-4">
         <h3 className="text-lg font-semibold">Total Amount:</h3>
         <p>{totalAmountNumber.toFixed(2)} Rs</p>
+      </div>
+
+      <div className="mb-4">
+        <h3 className="text-lg font-semibold">Select GST Rate:</h3>
+        <select
+          className="border px-4 py-2"
+          value={gstRate}
+          onChange={handleGstChange}
+        >
+          <option value={13}>13%</option>
+          <option value={18}>18%</option>
+        </select>
       </div>
 
       <div className="mb-4">
