@@ -57,7 +57,7 @@ const DetailInvoice = () => {
     const imgWidth = 60; // Adjust the width of the image
     const imgHeight = 138; // Adjust the height of the image
     const x = (width - imgWidth) / 2; // Center horizontally
-    const y = height - imgHeight - 10; // Position near the bottom with some margin
+    const y = height - imgHeight - -20; // Position near the bottom with some margin
 
     const addBackgroundImage = () => {
       if (img) {
@@ -72,7 +72,9 @@ const DetailInvoice = () => {
     doc.setFontSize(12);
     doc.text(`Challan NO. ${InvoiceNo}`, 20, 60);
     doc.text(`${formattedDate}`, 20, 65);
+    doc.setFont("helvetica", "bold");
     doc.text(`${To}`, 20, 70);
+    doc.setFont("helvetica", "normal");
     doc.text(`${Address}`, 20, 75);
     doc.text(`Unit: ${Unit}`, 20, 80);
 
@@ -102,7 +104,7 @@ const DetailInvoice = () => {
     doc.text(
       "FOR: Al-MEHRIA ENGINEERING WORKS",
       20,
-      doc.autoTable.previous.finalY + 60
+      doc.autoTable.previous.finalY + 80
     );
 
     doc.addPage();
@@ -112,9 +114,11 @@ const DetailInvoice = () => {
 
     doc.text(`INVOICE NO. ${InvoiceNo}`, 20, 55);
     doc.text(`${formattedDate}`, 20, 60);
+    doc.setFont("helvetica", "bold");
     doc.text(`${To}`, 20, 70);
-    doc.text(`${Address}`, 20, 80);
-    doc.text(`P.O# ${PosNo}`, 20, 90);
+    doc.setFont("helvetica", "normal");
+    doc.text(`${Address}`, 20, 75);
+    doc.text(`P.O# ${PosNo}`, 20, 80);
 
     doc.autoTable({
       startY: 100,
@@ -128,40 +132,86 @@ const DetailInvoice = () => {
       ]),
     });
 
+    // doc.text(
+    //   `TOTAL AMOUNT: ${totalAmountNumber.toFixed(2)}-`,
+    //   20,
+    //   doc.autoTable.previous.finalY + 10
+    // );
+    // doc.text(
+    //   `SALES TAX AMOUNT: Rs ${salesTaxAmount.toFixed(2)}/-`,
+    //   20,
+    //   doc.autoTable.previous.finalY + 15
+    // );
+    // doc.text(
+    //   `NET AMOUNT: Rs. ${netAmount.toFixed(2)}/-`,
+    //   20,
+    //   doc.autoTable.previous.finalY + 20
+    // );
+
+    doc.autoTable({
+      startY: doc.autoTable.previous.finalY + 5,
+      body: [
+        ["TOTAL AMOUNT", `${totalAmountNumber.toFixed(2)}/-`],
+        ["SALES TAX AMOUNT", `Rs ${salesTaxAmount.toFixed(2)}/-`],
+        ["NET AMOUNT", `Rs. ${netAmount.toFixed(2)}/-`],
+      ],
+      columns: [{ dataKey: "description" }, { dataKey: "amount" }],
+      columnStyles: {
+        0: { halign: "left" }, // First column (index 0) is the description
+        1: { halign: "right" }, // Second column (index 1) is the amount
+      },
+      didParseCell: function (data) {
+        if (data.row.section === "body") {
+          if (data.column.dataKey === "description") {
+            data.cell.styles.halign = "left";
+          }
+          if (data.column.dataKey === "amount") {
+            data.cell.styles.halign = "right";
+          }
+        }
+      },
+    });
+
     doc.text(
-      `TOTAL AMOUNT: ${totalAmountNumber.toFixed(2)}-`,
+      "FOR: Al-MEHRIA ENGINEERING WORKS",
       20,
-      doc.autoTable.previous.finalY + 10
-    );
-    doc.text(
-      `SALES TAX AMOUNT: Rs ${salesTaxAmount.toFixed(2)}/-`,
-      20,
-      doc.autoTable.previous.finalY + 15
-    );
-    doc.text(
-      `NET AMOUNT: Rs. ${netAmount.toFixed(2)}/-`,
-      20,
-      doc.autoTable.previous.finalY + 20
+      doc.autoTable.previous.finalY + 60
     );
 
     doc.addPage();
     addBackgroundImage();
 
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    // Calculate the starting X position for right-aligned text
+    const text1 = `Al- Mehria Engineering NTN# 2876495-1`;
+    const text2 = `GST# 3277876212202`;
+
+    const text1Width = doc.getTextWidth(text1);
+    const text2Width = doc.getTextWidth(text2);
+
+    const text1X = pageWidth - text1Width - 20; // 20 is the right margin
+    const text2X = pageWidth - text2Width - 20; // 20 is the right margin
+
     doc.text("SALES TAX INVOICE", 105, 40, { align: "center" });
 
     doc.text(`INVOICE NO. ${InvoiceNo}`, 20, 50);
     doc.text(`${formattedDate}`, 20, 55);
-    doc.text(`Al- Mehria Engineering NTN# 2876495-1`, 20, 60);
-    doc.text(`GST# 3277876212202`, 20, 65);
+    // doc.text(`Al- Mehria Engineering NTN# 2876495-1`, 20, 60);
+    // doc.text(`GST# 3277876212202`, 20, 65);
+    doc.setFont("helvetica", "bold");
     doc.text(`${To}`, 20, 75);
+    doc.setFont("helvetica", "normal");
     doc.text(`${Address}`, 20, 80);
     doc.text(`NTN# ${CustomerNo}`, 20, 85);
     doc.text(`GST# ${GstNo}`, 20, 90);
     doc.text(`P.O# ${PosNo}`, 20, 95);
 
+    doc.text(text1, text1X, 60);
+    doc.text(text2, text2X, 65);
     doc.autoTable({
       startY: 105,
-      head: [["SR.", "DESCRIPTION", "U.PRICE", "QTY.", "T.AMOUNT"]],
+      head: [["SR.", "DESCRIPTION", "U.PRICE", "QTY.", "TOTAL AMOUNT"]],
       body: Products.map((product, index) => [
         index + 1,
         product.name,
@@ -171,20 +221,50 @@ const DetailInvoice = () => {
       ]),
     });
 
+    // doc.text(
+    //   `TOTAL AMOUNT: ${totalAmountNumber.toFixed(2)}-`,
+    //   20,
+    //   doc.autoTable.previous.finalY + 10
+    // );
+    // doc.text(
+    //   `SALES TAX AMOUNT: Rs ${salesTaxAmount.toFixed(2)}/-`,
+    //   20,
+    //   doc.autoTable.previous.finalY + 15
+    // );
+    // doc.text(
+    //   `NET AMOUNT: Rs. ${netAmount.toFixed(2)}/-`,
+    //   20,
+    //   doc.autoTable.previous.finalY + 20
+    // );
+
+    doc.autoTable({
+      startY: doc.autoTable.previous.finalY + 5,
+      body: [
+        ["TOTAL AMOUNT", `${totalAmountNumber.toFixed(2)}/-`],
+        ["SALES TAX AMOUNT", `Rs ${salesTaxAmount.toFixed(2)}/-`],
+        ["NET AMOUNT", `Rs. ${netAmount.toFixed(2)}/-`],
+      ],
+      columns: [{ dataKey: "description" }, { dataKey: "amount" }],
+      columnStyles: {
+        0: { halign: "left" }, // First column (index 0) is the description
+        1: { halign: "right" }, // Second column (index 1) is the amount
+      },
+      didParseCell: function (data) {
+        if (data.row.section === "body") {
+          if (data.column.dataKey === "description") {
+            data.cell.styles.halign = "left";
+          }
+          if (data.column.dataKey === "amount") {
+            data.cell.styles.halign = "right";
+          }
+        }
+      },
+    });
+
     doc.text(
-      `TOTAL AMOUNT: ${totalAmountNumber.toFixed(2)}-`,
+      "FOR: Al-MEHRIA ENGINEERING WORKS",
       20,
-      doc.autoTable.previous.finalY + 10
-    );
-    doc.text(
-      `SALES TAX AMOUNT: Rs ${salesTaxAmount.toFixed(2)}/-`,
-      20,
-      doc.autoTable.previous.finalY + 15
-    );
-    doc.text(
-      `NET AMOUNT: Rs. ${netAmount.toFixed(2)}/-`,
-      20,
-      doc.autoTable.previous.finalY + 20
+      doc.autoTable.previous.finalY + 60
     );
 
     doc.save(`Invoice_${InvoiceNo}.pdf`);
@@ -193,7 +273,6 @@ const DetailInvoice = () => {
   return (
     <div className="p-8 bg-white rounded-lg shadow-md max-w-4xl mx-auto">
       <h2 className="text-2xl font-bold mb-6">Invoice Details</h2>
-
       <div className="mb-4">
         <h3 className="text-lg font-semibold">NTN No:</h3>
         <p>{CustomerNo}</p>
@@ -202,13 +281,16 @@ const DetailInvoice = () => {
         <h3 className="text-lg font-semibold">Company Name:</h3>
         <p>{To}</p>
       </div>
-
       <div className="mb-4">
         <h3 className="text-lg font-semibold">Invoice No:</h3>
         <p>{InvoiceNo}</p>
       </div>
       <div className="mb-4">
-        <h3 className="text-lg font-semibold">Pos No:</h3>
+        <h3 className="text-lg font-semibold">GST No:</h3>
+        <p>{GstNo}</p>
+      </div>
+      <div className="mb-4">
+        <h3 className="text-lg font-semibold">Po No:</h3>
         <p>{PosNo}</p>
       </div>
 
@@ -252,10 +334,6 @@ const DetailInvoice = () => {
       <div className="mb-4">
         <h3 className="text-lg font-semibold">Total Amount:</h3>
         <p>{totalAmountNumber.toFixed(2)} Rs</p>
-      </div>
-      <div className="mb-4">
-        <h3 className="text-lg font-semibold">GST No:</h3>
-        <p>{GstNo}</p>
       </div>
 
       <div className="mb-4">
