@@ -82,23 +82,45 @@ const DetailInvoice = () => {
 
     addBackgroundImage();
 
-    doc.text("DELIVERY CHALLAN", 105, 45, { align: "center" });
-
+    doc.text("DELIVERY CHALLAN", 105, 80, { align: "center" });
     doc.setFontSize(12);
-    doc.text(`Challan NO. ${InvoiceNo}`, 20, 60);
-    doc.text(`${formattedDate}`, 20, 65);
+    doc.text(`Challan NO. ${InvoiceNo}`, 20, 40);
+    doc.text(`${formattedDate}`, 20, 45);
     doc.setFont("helvetica", "bold");
-    doc.text(`${To}`, 20, 70);
+    doc.text(`${To}`, 20, 50);
     doc.setFont("helvetica", "normal");
-    doc.text(`${Address}`, 20, 75);
-    doc.text(`Unit: ${Unit}`, 20, 80);
+    doc.text(`${Address}`, 20, 55);
+    doc.text(`Unit: ${Unit}`, 20, 60);
 
-    doc.text("Dear sir,", 20, 90);
-    doc.text(
-      `Thank you very much for your valued P.O#${PosNo}. We are pleased to deliver the following items.`,
-      20,
-      95
-    );
+    // doc.text("Dear sir,", 20, 90);
+    // doc.text(
+    //   `Thank you very much for your valued P.O#${PosNo}. We are pleased to deliver the following items.`,
+    //   20,
+    //   95
+    // );
+
+    // Split the text into parts
+    const preText = "Thank you very much for your valued P.O# ";
+    const postText = ". We are pleased to deliver the following items.";
+    const startX = 15;
+    const startY = 95;
+
+    // Add the preText
+    doc.text(preText, startX, startY);
+
+    // Measure the width of the preText
+    const preTextWidth = doc.getTextWidth(preText);
+
+    // Set font to bold and add PosNo
+    doc.setFont("helvetica", "bold");
+    doc.text(PosNo, startX + preTextWidth, startY);
+
+    // Measure the width of the PosNo
+    const PosNoWidth = doc.getTextWidth(PosNo);
+
+    // Set font back to normal and add postText
+    doc.setFont("helvetica", "normal");
+    doc.text(postText, startX + preTextWidth + PosNoWidth, startY);
 
     doc.autoTable({
       startY: 100,
@@ -124,16 +146,21 @@ const DetailInvoice = () => {
 
     doc.addPage();
     addBackgroundImage();
-
-    doc.text("Commercial Invoice", 105, 40, { align: "center" });
-
-    doc.text(`INVOICE NO. ${InvoiceNo}`, 20, 55);
-    doc.text(`${formattedDate}`, 20, 60);
     doc.setFont("helvetica", "bold");
-    doc.text(`${To}`, 20, 70);
+
+    doc.text("Commercial Invoice", 105, 80, { align: "center" });
+
     doc.setFont("helvetica", "normal");
-    doc.text(`${Address}`, 20, 75);
-    doc.text(`P.O# ${PosNo}`, 20, 80);
+
+    doc.text(`INVOICE NO. ${InvoiceNo}`, 20, 45);
+    doc.text(`${formattedDate}`, 20, 50);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${To}`, 20, 55);
+    doc.setFont("helvetica", "normal");
+    doc.text(`${Address}`, 20, 60);
+    doc.setFont("helvetica", "bold");
+
+    doc.text(`P.O# ${PosNo}`, 20, 70);
 
     doc.autoTable({
       startY: 100,
@@ -166,11 +193,11 @@ const DetailInvoice = () => {
     doc.autoTable({
       startY: doc.autoTable.previous.finalY + 5,
       body: [
-        ["TOTAL AMOUNT", `${totalAmountNumber.toFixed(2)}/-`],
+        ["TOTAL AMOUNT", `Rs. ${totalAmountNumber.toFixed(2)}/-`],
         // ["SALES TAX AMOUNT", `Rs ${salesTaxAmount.toFixed(2)}/-`],
         // ["NET AMOUNT", `Rs. ${netAmount.toFixed(2)}/-`],
 
-        [`SALES TAX AMOUNT`, `Rs ${gstAmount.toFixed(2)}/-`], // Display GST amount
+        [`SALES TAX AMOUNT`, `Rs. ${gstAmount.toFixed(2)}/-`], // Display GST amount
         ["NET AMOUNT", `Rs. ${netAmount.toFixed(2)}/-`], // Display net amount
       ],
       columns: [{ dataKey: "description" }, { dataKey: "amount" }],
@@ -196,6 +223,38 @@ const DetailInvoice = () => {
       doc.autoTable.previous.finalY + 60
     );
 
+    // doc.addPage();
+    // addBackgroundImage();
+
+    // const pageWidth = doc.internal.pageSize.getWidth();
+
+    // // Calculate the starting X position for right-aligned text
+    // const text1 = `Al- Mehria Engineering NTN# 2876495-1`;
+    // const text2 = `GST# 3277876212202`;
+
+    // const text1Width = doc.getTextWidth(text1);
+    // const text2Width = doc.getTextWidth(text2);
+
+    // const text1X = pageWidth - text1Width - 20; // 20 is the right margin
+    // const text2X = pageWidth - text2Width - 25; // 20 is the right margin
+
+    // doc.text("SALES TAX INVOICE", 105, 80, { align: "center" });
+
+    // doc.text(`INVOICE NO. ${InvoiceNo}`, 20, 35);
+    // doc.text(`${formattedDate}`, 20, 40);
+    // // doc.text(`Al- Mehria Engineering NTN# 2876495-1`, 20, 60);
+    // // doc.text(`GST# 3277876212202`, 20, 65);
+    // doc.setFont("helvetica", "bold");
+    // doc.text(`${To}`, 20, 55);
+    // doc.setFont("helvetica", "normal");
+    // doc.text(`${Address}`, 20, 60);
+    // doc.text(`${To} NTN# ${CustomerNo}`, 20, 65);
+    // doc.text(`GST# ${GstNo}`, 20, 70);
+    // doc.text(`P.O# ${PosNo}`, 20, 75);
+
+    // doc.text(text1, text1X, 35);
+    // doc.text(text2, text2X, 40);
+
     doc.addPage();
     addBackgroundImage();
 
@@ -209,24 +268,36 @@ const DetailInvoice = () => {
     const text2Width = doc.getTextWidth(text2);
 
     const text1X = pageWidth - text1Width - 20; // 20 is the right margin
-    const text2X = pageWidth - text2Width - 20; // 20 is the right margin
+    const text2X = pageWidth - text2Width - 25; // 20 is the right margin
 
-    doc.text("SALES TAX INVOICE", 105, 40, { align: "center" });
+    // New text to be right aligned
+    const rightText = `${To} NTN# ${CustomerNo}`;
+    const rightTextWidth = doc.getTextWidth(rightText);
+    const rightTextX = pageWidth - rightTextWidth - 20; // 20 is the right margin
 
-    doc.text(`INVOICE NO. ${InvoiceNo}`, 20, 50);
-    doc.text(`${formattedDate}`, 20, 55);
-    // doc.text(`Al- Mehria Engineering NTN# 2876495-1`, 20, 60);
-    // doc.text(`GST# 3277876212202`, 20, 65);
+    const gstText = `GST# ${GstNo}`;
+    const gstTextWidth = doc.getTextWidth(gstText);
+    const gstTextX = pageWidth - gstTextWidth - 25; // 20 is the right margin
+
+    doc.text("SALES TAX INVOICE", 105, 90, { align: "center" });
+
+    doc.text(`INVOICE NO. ${InvoiceNo}`, 20, 40);
+    doc.text(`${formattedDate}`, 20, 45);
     doc.setFont("helvetica", "bold");
-    doc.text(`${To}`, 20, 75);
+    doc.text(`${To}`, 20, 50);
     doc.setFont("helvetica", "normal");
-    doc.text(`${Address}`, 20, 80);
-    doc.text(`NTN# ${CustomerNo}`, 20, 85);
-    doc.text(`GST# ${GstNo}`, 20, 90);
-    doc.text(`P.O# ${PosNo}`, 20, 95);
+    doc.text(`${Address}`, 20, 55);
+    doc.setFont("helvetica", "bold");
 
-    doc.text(text1, text1X, 60);
-    doc.text(text2, text2X, 65);
+    doc.text(`P.O# ${PosNo}`, 20, 75);
+
+    doc.setFont("helvetica", "normal");
+
+    doc.text(text1, text1X, 40);
+    doc.text(text2, text2X, 45);
+    doc.text(rightText, rightTextX, 60); // Right-aligned text for NTN#
+    doc.text(gstText, gstTextX, 65); // Right-aligned text for GST#
+
     doc.autoTable({
       startY: 105,
       head: [["SR.", "DESCRIPTION", "U.PRICE", "QTY.", "TOTAL AMOUNT"]],
@@ -258,8 +329,8 @@ const DetailInvoice = () => {
     doc.autoTable({
       startY: doc.autoTable.previous.finalY + 5,
       body: [
-        ["TOTAL AMOUNT", `${totalAmountNumber.toFixed(2)}/-`],
-        ["SALES TAX AMOUNT", `Rs ${gstAmount.toFixed(2)}/-`],
+        ["TOTAL AMOUNT", `Rs. ${totalAmountNumber.toFixed(2)}/-`],
+        ["SALES TAX AMOUNT", `Rs. ${gstAmount.toFixed(2)}/-`],
         ["NET AMOUNT", `Rs. ${netAmount.toFixed(2)}/-`],
       ],
       columns: [{ dataKey: "description" }, { dataKey: "amount" }],
