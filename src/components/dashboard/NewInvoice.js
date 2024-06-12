@@ -370,34 +370,44 @@ const NewInvoice = () => {
     document.getElementById("customerDropdown").value = "";
   };
 
+  const getUniqueNTNs = (invoices) => {
+    const seen = new Set();
+    return invoices.filter((invoice) => {
+      const duplicate = seen.has(invoice.CustomerNo);
+      seen.add(invoice.CustomerNo);
+      return !duplicate;
+    });
+  };
+
   return (
     <div className="flex justify-center items-end min-h-screen bg-gray-100 p-4">
       <div className="max-w-2xl w-full bg-white p-8 rounded-lg shadow-lg">
         <h1 className="text-center font-bold text-2xl bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-800 mb-8 mt-2">
           NEW INVOICE
         </h1>
-        <div className=" flex justify-end">
+        <div className="flex justify-between mb-4">
+          <select
+            id="customerDropdown"
+            onChange={handleInvoiceSelect}
+            className="w-full border border-gray-300 rounded-md py-2 px-4 placeholder-gray-400 focus:outline-none focus:border-blue-500"
+          >
+            <option value="">Select existing customer</option>
+            {getUniqueNTNs(invoices).map((invoice) => (
+              <option key={invoice.id} value={invoice.id}>
+                {invoice.CustomerNo}
+              </option>
+            ))}
+          </select>
           <button
-            className=" w-[100px] mb-2 bg-red-500 text-white font-semibold py-2 rounded-md transition duration-300 hover:bg-red-600 focus:outline-none focus:bg-red-600"
+            className="ml-2 bg-red-500 text-white font-semibold py-2 px-4 rounded-md transition duration-300 hover:bg-red-600 focus:outline-none focus:bg-red-600"
             type="button"
             onClick={handleClear}
           >
             Clear
           </button>
         </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-          <select
-            id="customerDropdown"
-            onChange={handleInvoiceSelect}
-            className="w-full border border-gray-300 rounded-md py-2 px-4 placeholder-gray-400 focus:outline-none focus:border-blue-500"
-          >
-            <option value="">Select existing invoice</option>
-            {invoices.map((invoice) => (
-              <option key={invoice.id} value={invoice.id}>
-                {invoice.CustomerNo}
-              </option>
-            ))}
-          </select>
           <input
             onChange={(e) => setCustomerNumber(e.target.value)}
             className="w-full border border-gray-300 rounded-md py-2 px-4 placeholder-gray-400 focus:outline-none focus:border-blue-500"
@@ -428,7 +438,7 @@ const NewInvoice = () => {
           />
           <input
             onChange={(e) => setTo(e.target.value)}
-            className="w-full border border-gray-300 rounded-md py-2 px-4 placeholder-gray-400 focus:outline-none focus:border-blue-500"
+            className="w-full border border-gray-300 rounded-md py-2 px-4 placeholder-gray-400 focus:outline-none focus:border-blue-500 col-span-2"
             type="text"
             placeholder="Company Name"
             value={to}
