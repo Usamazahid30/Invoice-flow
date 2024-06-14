@@ -88,13 +88,16 @@ const Invoices = () => {
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Invoices</h1>
       <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Search by NTN No"
-          value={searchCustomerNo}
-          onChange={handleSearchChange}
-          className="font-bold p-2 border border-gray-800 rounded w-full"
-        />
+        <div className="flex items-center border border-gray-800 rounded">
+          <i className="fa-solid fa-magnifying-glass p-2 text-gray-600"></i>
+          <input
+            type="text"
+            placeholder="Search by NTN No"
+            value={searchCustomerNo}
+            onChange={handleSearchChange}
+            className="font-bold p-2  focus:outline-none w-full"
+          />
+        </div>
       </div>
       {Object.keys(groupedInvoices).length === 0 ? (
         <p>No invoices found.</p>
