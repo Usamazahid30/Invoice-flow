@@ -84,13 +84,13 @@ const DetailInvoice = () => {
 
     doc.text("DELIVERY CHALLAN", 105, 80, { align: "center" });
     doc.setFontSize(12);
-    doc.text(`Challan NO. ${InvoiceNo}`, 20, 40);
-    doc.text(`${formattedDate}`, 20, 45);
+    doc.text(`Challan NO. ${InvoiceNo}`, 20, 45);
+    doc.text(`${formattedDate}`, 20, 50);
     doc.setFont("helvetica", "bold");
-    doc.text(`${To}`, 20, 50);
+    doc.text(`${To}`, 20, 55);
     doc.setFont("helvetica", "normal");
-    doc.text(`${Address}`, 20, 55);
-    doc.text(`Unit: ${Unit}`, 20, 60);
+    doc.text(`${Address}`, 20, 60);
+    doc.text(`Unit: ${Unit}`, 20, 65);
 
     // doc.text("Dear sir,", 20, 90);
     // doc.text(
@@ -267,36 +267,36 @@ const DetailInvoice = () => {
     const text1Width = doc.getTextWidth(text1);
     const text2Width = doc.getTextWidth(text2);
 
-    const text1X = pageWidth - text1Width - 20; // 20 is the right margin
-    const text2X = pageWidth - text2Width - 25; // 20 is the right margin
+    const text1X = pageWidth - text1Width - 10; // 20 is the right margin
+    const text2X = pageWidth - text2Width - 15; // 20 is the right margin
 
     // New text to be right aligned
     const rightText = `${To} NTN# ${CustomerNo}`;
     const rightTextWidth = doc.getTextWidth(rightText);
-    const rightTextX = pageWidth - rightTextWidth - 20; // 20 is the right margin
+    const rightTextX = pageWidth - rightTextWidth - 10; // 20 is the right margin
 
     const gstText = `GST# ${GstNo}`;
     const gstTextWidth = doc.getTextWidth(gstText);
-    const gstTextX = pageWidth - gstTextWidth - 25; // 20 is the right margin
+    const gstTextX = pageWidth - gstTextWidth - 15; // 20 is the right margin
 
     doc.text("SALES TAX INVOICE", 105, 90, { align: "center" });
 
-    doc.text(`INVOICE NO. ${InvoiceNo}`, 20, 40);
-    doc.text(`${formattedDate}`, 20, 45);
+    doc.text(`INVOICE NO. ${InvoiceNo}`, 20, 45);
+    doc.text(`${formattedDate}`, 20, 50);
     doc.setFont("helvetica", "bold");
-    doc.text(`${To}`, 20, 50);
+    doc.text(`${To}`, 20, 55);
     doc.setFont("helvetica", "normal");
-    doc.text(`${Address}`, 20, 55);
+    doc.text(`${Address}`, 20, 60);
     doc.setFont("helvetica", "bold");
 
     doc.text(`P.O# ${PosNo}`, 20, 75);
 
     doc.setFont("helvetica", "normal");
 
-    doc.text(text1, text1X, 40);
-    doc.text(text2, text2X, 45);
-    doc.text(rightText, rightTextX, 60); // Right-aligned text for NTN#
-    doc.text(gstText, gstTextX, 65); // Right-aligned text for GST#
+    doc.text(text1, text1X, 45);
+    doc.text(text2, text2X, 50);
+    doc.text(rightText, rightTextX, 70); // Right-aligned text for NTN#
+    doc.text(gstText, gstTextX, 75); // Right-aligned text for GST#
 
     doc.autoTable({
       startY: 105,
