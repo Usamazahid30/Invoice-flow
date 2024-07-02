@@ -99,13 +99,6 @@ const DetailInvoice = () => {
     doc.text(`${Address}`, 20, 60);
     doc.text(`Unit: ${Unit}`, 20, 65);
 
-    // doc.text("Dear sir,", 20, 90);
-    // doc.text(
-    //   `Thank you very much for your valued P.O#${PosNo}. We are pleased to deliver the following items.`,
-    //   20,
-    //   95
-    // );
-
     // Split the text into parts
     const preText = "Thank you very much for your valued P.O# ";
     const postText = ". We are pleased to deliver the following items.";
@@ -186,28 +179,10 @@ const DetailInvoice = () => {
       ]),
     });
 
-    // doc.text(
-    //   `TOTAL AMOUNT: ${totalAmountNumber.toFixed(2)}-`,
-    //   20,
-    //   doc.autoTable.previous.finalY + 10
-    // );
-    // doc.text(
-    //   `SALES TAX AMOUNT: Rs ${salesTaxAmount.toFixed(2)}/-`,
-    //   20,
-    //   doc.autoTable.previous.finalY + 15
-    // );
-    // doc.text(
-    //   `NET AMOUNT: Rs. ${netAmount.toFixed(2)}/-`,
-    //   20,
-    //   doc.autoTable.previous.finalY + 20
-    // );
-
     doc.autoTable({
       startY: doc.autoTable.previous.finalY + 5,
       body: [
         ["TOTAL AMOUNT", `Rs. ${totalAmountNumber.toFixed(2)}/-`],
-        // ["SALES TAX AMOUNT", `Rs ${salesTaxAmount.toFixed(2)}/-`],
-        // ["NET AMOUNT", `Rs. ${netAmount.toFixed(2)}/-`],
 
         [`SALES TAX AMOUNT`, `Rs. ${gstAmount.toFixed(2)}/-`], // Display GST amount
         ["NET AMOUNT", `Rs. ${netAmount.toFixed(2)}/-`], // Display net amount
@@ -234,38 +209,6 @@ const DetailInvoice = () => {
       20,
       doc.autoTable.previous.finalY + 60
     );
-
-    // doc.addPage();
-    // addBackgroundImage();
-
-    // const pageWidth = doc.internal.pageSize.getWidth();
-
-    // // Calculate the starting X position for right-aligned text
-    // const text1 = `Al- Mehria Engineering NTN# 2876495-1`;
-    // const text2 = `GST# 3277876212202`;
-
-    // const text1Width = doc.getTextWidth(text1);
-    // const text2Width = doc.getTextWidth(text2);
-
-    // const text1X = pageWidth - text1Width - 20; // 20 is the right margin
-    // const text2X = pageWidth - text2Width - 25; // 20 is the right margin
-
-    // doc.text("SALES TAX INVOICE", 105, 80, { align: "center" });
-
-    // doc.text(`INVOICE NO. ${InvoiceNo}`, 20, 35);
-    // doc.text(`${formattedDate}`, 20, 40);
-    // // doc.text(`Al- Mehria Engineering NTN# 2876495-1`, 20, 60);
-    // // doc.text(`GST# 3277876212202`, 20, 65);
-    // doc.setFont("helvetica", "bold");
-    // doc.text(`${To}`, 20, 55);
-    // doc.setFont("helvetica", "normal");
-    // doc.text(`${Address}`, 20, 60);
-    // doc.text(`${To} NTN# ${CustomerNo}`, 20, 65);
-    // doc.text(`GST# ${GstNo}`, 20, 70);
-    // doc.text(`P.O# ${PosNo}`, 20, 75);
-
-    // doc.text(text1, text1X, 35);
-    // doc.text(text2, text2X, 40);
 
     doc.addPage();
     addBackgroundImage();
@@ -322,22 +265,6 @@ const DetailInvoice = () => {
         (product.qty * product.price).toFixed(2),
       ]),
     });
-
-    // doc.text(
-    //   `TOTAL AMOUNT: ${totalAmountNumber.toFixed(2)}-`,
-    //   20,
-    //   doc.autoTable.previous.finalY + 10
-    // );
-    // doc.text(
-    //   `SALES TAX AMOUNT: Rs ${salesTaxAmount.toFixed(2)}/-`,
-    //   20,
-    //   doc.autoTable.previous.finalY + 15
-    // );
-    // doc.text(
-    //   `NET AMOUNT: Rs. ${netAmount.toFixed(2)}/-`,
-    //   20,
-    //   doc.autoTable.previous.finalY + 20
-    // );
 
     doc.autoTable({
       startY: doc.autoTable.previous.finalY + 5,
