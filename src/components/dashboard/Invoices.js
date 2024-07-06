@@ -490,7 +490,7 @@ const Invoices = () => {
           <table className="min-w-full bg-white shadow-md rounded-lg">
             <thead>
               <tr className="bg-blue-500 text-white">
-                <th className="py-2 px-4 text-left">NTN No</th>
+                <th className="py-2 px-4 text-left ">NTN No</th>
                 <th className="py-2 px-4 text-left w-1/3">Company Name</th>
                 <th className="py-2 px-4 text-left">Invoice No</th>
                 <th className="py-2 px-4 text-left">Total Amount</th>
@@ -507,25 +507,25 @@ const Invoices = () => {
                     <tr key={invoice.id} className="hover:bg-gray-300">
                       {index === 0 && (
                         <td
-                          className="py-2 px-4 border-t border-gray-200"
+                          className="py-2 px-4 border-t border-gray-800 "
                           rowSpan={groupedInvoices[customerNo].length}
                         >
                           {customerNo}
                         </td>
                       )}
-                      <td className="py-2 px-4 border-t border-gray-200 w-1/3">
+                      <td className="py-2 px-4 border-t border-gray-800 w-1/3 text-xs">
                         {invoice.To}
                       </td>
-                      <td className="py-2 px-4 border-t border-gray-200">
+                      <td className="py-2 px-4 border-t border-gray-800">
                         {invoice.InvoiceNo}
                       </td>
-                      <td className="py-2 px-4 border-t border-gray-200">
+                      <td className="py-2 px-4 border-t border-gray-800">
                         {invoice.totalAmount}
                       </td>
-                      <td className="py-2 px-4 border-t border-gray-200">
+                      <td className="py-2 px-4 border-t border-gray-800">
                         {invoice.paid ? "Paid" : "Pending"}
                       </td>
-                      <td className="py-2 px-4 border-t border-gray-200 text-center">
+                      <td className="py-2 px-4 border-t border-gray-800 text-center">
                         <div className="flex justify-center items-center">
                           <button
                             onClick={() => confirmDeleteInvoice(invoice.id)}
@@ -558,7 +558,7 @@ const Invoices = () => {
                           )}
                         </div>
                       </td>
-                      <td className="py-2 px-4 border-t border-gray-200 text-center">
+                      <td className="py-2 px-4 border-t border-gray-800 text-center">
                         <input
                           type="checkbox"
                           checked={
@@ -572,7 +572,7 @@ const Invoices = () => {
                           className="form-checkbox h-5 w-5 text-blue-600"
                         />
                       </td>
-                      <td className="py-2 px-4 border-t border-gray-200 text-center">
+                      <td className="py-2 px-4 border-t border-gray-800 text-center">
                         <input
                           type="checkbox"
                           checked={invoice.paid}
