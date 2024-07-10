@@ -359,7 +359,7 @@ const DetailInvoice = () => {
                   >
                     <option>.</option>
                     <option>Nos</option>
-                    <option>Pos</option>
+                    <option>Sets</option>
                   </select>
                 </td>
                 <td className="border px-4 py-2">
