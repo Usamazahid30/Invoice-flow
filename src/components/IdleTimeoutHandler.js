@@ -6,8 +6,7 @@ const IdleTimeoutHandler = () => {
   const navigate = useNavigate();
   const handleOnIdle = () => {
     alert("You have been logged out due to inactivity.");
-    // Perform logout logic here (e.g., clearing tokens, redirecting to login page)
-    navigate("/login"); // Redirect to the login page
+    navigate("/login");
   };
 
   useIdleTimer({

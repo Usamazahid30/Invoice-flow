@@ -456,6 +456,28 @@ const Invoices = () => {
       headStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] },
     });
 
+    // Calculate total amount
+    const totalAmount = selected.reduce(
+      (sum, invoice) => sum + parseFloat(invoice.totalAmount),
+      0
+    );
+
+    // Get the Y position after the table
+    const finalY = doc.autoTable.previous.finalY || 100;
+
+    // Add total amount text
+    doc.setFontSize(12);
+    doc.setFont(undefined, "bold");
+
+    const totalText = `Total Amount: Rs.${totalAmount.toFixed(2)}/-`;
+    const textWidth = doc.getTextWidth(totalText);
+    const pageWidth = doc.internal.pageSize.width;
+    const rightMargin = 20; // Margin from the right side
+
+    doc.text(totalText, pageWidth - textWidth - rightMargin, finalY + 10);
+
+    doc.setFont(undefined, "normal");
+
     doc.text("Thanks With Regards .", 20, 140 + 10 * invoiceData.length);
     doc.text(
       "Zain Ul Abideen .Cell.03032155063 / 03062772260",
