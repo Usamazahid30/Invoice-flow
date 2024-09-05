@@ -14,6 +14,7 @@ const Invoices = () => {
   const [showModal, setShowModal] = useState(false);
   const [invoiceToDelete, setInvoiceToDelete] = useState(null);
   const [selectedInvoices, setSelectedInvoices] = useState({});
+  const [gstRate, setGstRate] = useState(0);
 
   const navigate = useNavigate();
 
@@ -29,6 +30,9 @@ const Invoices = () => {
       setFilteredInvoices(loadedInvoices);
     });
   }, []);
+  const calculateGST = (amount) => {
+    return (parseFloat(amount) * gstRate) / 100;
+  };
 
   const confirmDeleteInvoice = (id) => {
     setShowModal(true);
@@ -144,12 +148,25 @@ const Invoices = () => {
       92
     ); // Underline
 
-    const invoiceData = selected.map((invoice, index) => [
-      index + 1,
-      invoice.InvoiceNo,
-      invoice.PosNo,
-      `Rs.${invoice.totalAmount}/-`,
-    ]);
+    // const invoiceData = selected.map((invoice, index) => [
+    //   index + 1,
+    //   invoice.InvoiceNo,
+    //   invoice.PosNo,
+    //   `Rs.${invoice.totalAmount}/-`,
+    // ]);
+
+    const invoiceData = selected.map((invoice, index) => {
+      const gstAmount = calculateGST(invoice.totalAmount);
+      const totalWithGST = parseFloat(invoice.totalAmount) + gstAmount;
+      return [
+        index + 1,
+        invoice.InvoiceNo,
+        invoice.PosNo,
+        `Rs.${invoice.totalAmount}/-`,
+        `Rs.${gstAmount.toFixed(2)}/-`,
+        `Rs.${totalWithGST.toFixed(2)}/-`,
+      ];
+    });
 
     doc.autoTable({
       startY: 100,
@@ -159,11 +176,22 @@ const Invoices = () => {
       headStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] },
     });
 
-    // Calculate total amount
+    // Calculate total amount 
+    // const totalAmount = selected.reduce(
+    //   (sum, invoice) => sum + parseFloat(invoice.totalAmount),
+    //   0
+    // );
+
     const totalAmount = selected.reduce(
-      (sum, invoice) => sum + parseFloat(invoice.totalAmount),
+      (sum, invoice) => 
+     sum + parseFloat(invoice.totalAmount) ,
       0
     );
+    const totalGSTAmount = selected.reduce(
+      (sum, invoice) => sum + calculateGST(invoice.totalAmount),
+      0
+    );
+    const totalAmountWithGST = totalAmount + totalGSTAmount;
 
     // Get the Y position after the table
     const finalY = doc.autoTable.previous.finalY || 100;
@@ -171,24 +199,38 @@ const Invoices = () => {
     // Add total amount text
     doc.setFontSize(12);
     doc.setFont(undefined, "bold");
-
-    const totalText = `Total Amount: Rs.${totalAmount.toFixed(2)}/-`;
-    const textWidth = doc.getTextWidth(totalText);
+    
     const pageWidth = doc.internal.pageSize.width;
     const rightMargin = 20; // Margin from the right side
 
-    doc.text(totalText, pageWidth - textWidth - rightMargin, finalY + 10);
+    doc.text(`Total Amount: Rs.${totalAmount.toFixed(2)}/-`, pageWidth - rightMargin, finalY + 10, { align: 'right' });
+    doc.text(`Total GST: Rs.${totalGSTAmount.toFixed(2)}/-`, pageWidth - rightMargin, finalY + 20, { align: 'right' });
+    doc.text(`Total Amount with GST: Rs.${totalAmountWithGST.toFixed(2)}/-`, pageWidth - rightMargin, finalY + 30, { align: 'right' });
 
     doc.setFont(undefined, "normal");
 
-    doc.text("Thanks With Regards .", 20, 140 + 10 * invoiceData.length);
-    doc.text(
-      "Zain Ul Abideen .Cell.03032155063 / 03062772260",
-      20,
-      145 + 10 * invoiceData.length
-    );
+    doc.text("Thanks With Regards", 20, finalY + 50);
+    doc.text("Zain Ul Abideen .Cell.03032155063 / 03062772260", 20, finalY + 60);
 
     doc.save(`selected_invoices_${customerNo}.pdf`);
+
+    // const totalText = `Total Amount: Rs.${totalAmountWithGST.toFixed(2)}/-`;
+    // const textWidth = doc.getTextWidth(totalText);
+    // const pageWidth = doc.internal.pageSize.width;
+    // const rightMargin = 20; // Margin from the right side
+
+    // doc.text(totalText, pageWidth - textWidth - rightMargin, finalY + 10);
+
+    // doc.setFont(undefined, "normal");
+
+    // doc.text("Thanks With Regards .", 20, 140 + 10 * invoiceData.length);
+    // doc.text(
+    //   "Zain Ul Abideen .Cell.03032155063 / 03062772260",
+    //   20,
+    //   145 + 10 * invoiceData.length
+    // );
+
+    // doc.save(`selected_invoices_${customerNo}.pdf`);
   };
 
   return (
@@ -207,6 +249,15 @@ const Invoices = () => {
           />
           <i className="fa-solid fa-magnifying-glass absolute right-2 top-3 text-gray-600"></i>
         </div>
+        <select
+          value={gstRate}
+          onChange={(e) => setGstRate(Number(e.target.value))}
+          className="p-2 rounded border border-gray-800 focus:outline-none"
+        >
+          <option value={0}>Select GST</option>
+          <option value={15}>15%</option>
+          <option value={18}>18%</option>
+        </select>
       </div>
       {Object.keys(groupedInvoices).length === 0 ? (
         <p className="text-center text-gray-600">No invoices found.</p>
@@ -219,6 +270,8 @@ const Invoices = () => {
                 <th className="py-2 px-4 text-left w-1/3">Company Name</th>
                 <th className="py-2 px-4 text-left">Invoice No</th>
                 <th className="py-2 px-4 text-left">Total Amount</th>
+                <th className="py-2 px-4 text-left">GST Amount</th>
+                <th className="py-2 px-4 text-left">Total with GST</th>
                 <th className="py-2 px-4 text-left">Status</th>
                 <th className="py-2 px-4 text-center">Actions</th>
                 <th className="py-2 px-4 text-center">Select</th>
@@ -228,7 +281,10 @@ const Invoices = () => {
             <tbody>
               {Object.keys(groupedInvoices).map((customerNo) => (
                 <React.Fragment key={customerNo}>
-                  {groupedInvoices[customerNo].map((invoice, index) => (
+                  {groupedInvoices[customerNo].map((invoice, index) => {
+                    const gstAmount = calculateGST(invoice.totalAmount);
+                    const totalWithGST = parseFloat(invoice.totalAmount) + gstAmount;
+                    return(
                     <tr key={invoice.id} className="hover:bg-gray-300">
                       {index === 0 && (
                         <td
@@ -247,6 +303,12 @@ const Invoices = () => {
                       <td className="py-2 px-4 border-t border-gray-800">
                         {invoice.totalAmount}
                       </td>
+                      <td className="py-2 px-4 border-t border-gray-800">
+                          {gstAmount.toFixed(2)}
+                        </td>
+                        <td className="py-2 px-4 border-t border-gray-800">
+                          {totalWithGST.toFixed(2)}
+                        </td>
                       <td className="py-2 px-4 border-t border-gray-800">
                         {invoice.paid ? "Paid" : "Pending"}
                       </td>
@@ -308,7 +370,8 @@ const Invoices = () => {
                         />
                       </td>
                     </tr>
-                  ))}
+                    )
+                  })}
                 </React.Fragment>
               ))}
             </tbody>

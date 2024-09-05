@@ -383,7 +383,7 @@ const DetailInvoice = () => {
           value={gstRate}
           onChange={handleGstChange}
         >
-          <option value={13}>13%</option>
+          <option value={15}>15%</option>
           <option value={18}>18%</option>
         </select>
       </div>
