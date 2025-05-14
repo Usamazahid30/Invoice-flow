@@ -9,19 +9,19 @@ import Invoices from "./components/dashboard/Invoices";
 import NewInvoice from "./components/dashboard/NewInvoice";
 import Setting from "./components/dashboard/Setting";
 import DetailInvoice from "./components/dashboard/DetailInvoice";
-// import Maintainance from "./components/login/maintain";
+import Maintainance from "./components/login/maintain";
 function App() {
   const myRouter = createBrowserRouter([
-    { path: "", Component: Login },
-    { path: "/login", Component: Login },
-    { path: "/register", Component: Register },
-    // { path: "", Component: Maintainance },
-    // { path: "/login", Component: Maintainance },
+    // { path: "", Component: Login },
+    // { path: "/login", Component: Login },
+    // { path: "/register", Component: Register },
+    { path: "", Component: Maintainance },
+    { path: "/login", Component: Maintainance },
 
     {
       path: "/dashboard",
       Component: Dashboard,
-      // Component: Maintainance,
+      Component: Maintainance,
       children: [
         { path: "", Component: Home },
         { path: "home", Component: Home },
